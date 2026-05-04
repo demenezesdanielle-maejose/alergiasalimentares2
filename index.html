@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escola Segura</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --crimson: #8B1A1A;
+      --gold: #D4A843;
+      --cream: #FAF7F2;
+      --charcoal: #1C1C1E;
+      --muted: #6B6560;
+      --soft-red: #C0392B;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--charcoal);
+    }
+
+    .hero {
+      background: var(--crimson);
+      padding: 60px;
+      color: white;
+    }
+
+    .hero h1 {
+      font-family: 'Fraunces', serif;
+      font-size: 3rem;
+    }
+
+    .container {
+      padding: 40px;
+    }
+
+    h2 {
+      margin-bottom: 16px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      margin-bottom: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    button {
+      padding: 12px 20px;
+      background: var(--crimson);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 30px;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background: #f4f4f4;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <section class="hero">
+    <h1>Escola Segura</h1>
+    <p>Gestão de alergias alimentares no ambiente escolar</p>
+  </section>
+
+  <div class="container">
+
+```
+<h2>Cadastrar Aluno</h2>
+
+<label>Nome</label>
+<input id="nome" placeholder="Nome do aluno">
+
+<label>Turma</label>
+<select id="turma">
+  <option value="">Selecione</option>
+  <option>1º Ano</option>
+  <option>2º Ano</option>
+  <option>3º Ano</option>
+</select>
+
+<label>Alergias</label>
+<textarea id="alergias" placeholder="Ex: leite, amendoim..."></textarea>
+
+<button onclick="salvar()">Salvar</button>
+
+<h2>Alunos cadastrados</h2>
+
+<table id="tabela">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Turma</th>
+      <th>Alergias</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+```
+
+  </div>
+
+  <script>
+    function salvar() {
+      const nome = document.getElementById('nome').value.trim();
+      const turma = document.getElementById('turma').value;
+      const alergias = document.getElementById('alergias').value;
+
+      if (!nome || !turma) {
+        alert("Preencha nome e turma");
+        return;
+      }
+
+      const aluno = { nome, turma, alergias };
+
+      let dados = JSON.parse(localStorage.getItem('alunos')) || [];
+      dados.push(aluno);
+
+      localStorage.setItem('alunos', JSON.stringify(dados));
+
+      render();
+      limpar();
+    }
+
+    function render() {
+      const tabela = document.querySelector('#tabela tbody');
+      tabela.innerHTML = '';
+
+      const dados = JSON.parse(localStorage.getItem('alunos')) || [];
+
+      dados.forEach(a => {
+        const row = `
+          <tr>
+            <td>${a.nome}</td>
+            <td>${a.turma}</td>
+            <td>${a.alergias}</td>
+          </tr>
+        `;
+        tabela.innerHTML += row;
+      });
+    }
+
+    function limpar() {
+      document.getElementById('nome').value = '';
+      document.getElementById('turma').selectedIndex = 0;
+      document.getElementById('alergias').value = '';
+    }
+
+    render();
+  </script>
+
+</body>
+</html>
